@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { FoodModule } from './food/food.module';
 
 @Module({
   imports: [
@@ -21,6 +22,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         synchronize: true, // ⚠️ Turn off in production
       }),
     }),
+
+    FoodModule,
   ],
 })
 export class AppModule {}
