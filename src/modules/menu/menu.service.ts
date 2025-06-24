@@ -42,4 +42,11 @@ export class MenuService {
     const item = await this.findByItemId(itemId);
     await this.repo.delete(item.id); // use internal UUID for deletion
   }
+
+  async updateImageUrl(itemId: string, imageUrl: string): Promise<Menu> {
+  const item = await this.findByItemId(itemId);
+  item.imageUrl = imageUrl;
+  return this.repo.save(item);
+}
+
 }

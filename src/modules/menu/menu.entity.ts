@@ -25,4 +25,8 @@ export class Menu {
 
   @Column()
   isPopular: boolean;
+
+  @Column({ nullable: true })
+imageUrl?: string;  // or imagePath
+
 }
