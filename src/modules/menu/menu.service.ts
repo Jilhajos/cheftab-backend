@@ -42,4 +42,8 @@ export class MenuService {
     const item = await this.findByItemId(itemId);
     await this.repo.delete(item.id); // use internal UUID for deletion
   }
+  async findByCategory(category: string) {
+  return this.repo.find({ where: { category } });
+}
+
 }
