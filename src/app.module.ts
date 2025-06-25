@@ -11,15 +11,22 @@ import { OrderModule } from './modules/order/order.module';
 import { Order } from './modules/order/order.entity';
 import { OrderItem } from './modules/order/order-item.entity';
 
-// Table Module & Entity ✅
+// Table Module & Entity
 import { TableModule } from './modules/tables/table.module';
 import { Table } from './modules/tables/table.entity';
 
+// Staff Module & Entity
+import { StaffModule } from './modules/staff/staff.module';
+import { Staff } from './modules/staff/staff.entity';
+
 @Module({
   imports: [
+    // Environment configuration
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+
+    // TypeORM configuration
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -30,13 +37,22 @@ import { Table } from './modules/tables/table.entity';
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_NAME'),
-        entities: [Menu, Order, OrderItem, Table], // ✅ added Table entity
-        synchronize: true,
+        entities: [
+          Menu,
+          Order,
+          OrderItem,
+          Table,
+          Staff, // ✅ Include Staff entity here
+        ],
+        synchronize: true, // ⚠️ Use false in production
       }),
     }),
+
+    // Domain modules
     MenuModule,
     OrderModule,
-    TableModule, // ✅ imported TableModule
+    TableModule,
+    StaffModule,
   ],
 })
 export class AppModule {}
