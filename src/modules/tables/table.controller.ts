@@ -6,7 +6,8 @@ import {
   Param,
   Patch,
   Delete,
-  Query
+  Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { TableService } from './table.service';
 import { CreateTableDto } from './create-table.dto';
@@ -21,25 +22,28 @@ export class TableController {
     return this.tableService.createTable(dto);
   }
 
-  // ✅ Updated to support optional filtering by section
   @Get()
   findAll(@Query('section') section?: string) {
     return this.tableService.getTablesBySection(section);
   }
 
+  @Get(':id')
+  getTableById(@Param('id', ParseIntPipe) id: number) {
+    return this.tableService.findById(id);
+  }
+
   @Patch(':id/status')
-  updateStatus(@Param('id') id: string, @Body() dto: UpdateTableStatusDto) {
-    return this.tableService.updateTableStatus(+id, dto);
+  updateStatus(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateTableStatusDto) {
+    return this.tableService.updateTableStatus(id, dto);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.tableService.deleteTable(+id);
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.tableService.deleteTable(id);
   }
 
   @Get('count')
-getTotalTablesCount() {
-  return this.tableService.getTotalTablesCount();
-}
-
+  getTotalTablesCount() {
+    return this.tableService.getTotalTablesCount();
+  }
 }

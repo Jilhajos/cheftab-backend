@@ -15,7 +15,7 @@ export class Order {
   id: number;
 
   @Column()
-  tableNumber: number;
+tableNumber: string;
 
   @ManyToOne(() => Table, table => table.orders, { eager: true })
   table: Table;

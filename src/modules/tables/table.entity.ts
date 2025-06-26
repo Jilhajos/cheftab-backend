@@ -11,8 +11,9 @@ export class Table {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
-  tableNumber: number;
+  @Column({ nullable: true })
+tableNumber: string;
+
 
   @Column()
   seats: number;

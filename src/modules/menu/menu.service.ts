@@ -14,13 +14,14 @@ export class MenuService {
   ) {}
  
   async create(dto: CreateMenuDto): Promise<Menu> {
-    const menuItem = this.repo.create(dto);
- 
-    // ✅ Generate itemId (8-char random string)
-    menuItem.itemId = 'ITEM-' + randomBytes(4).toString('hex').toUpperCase();
- 
-    return await this.repo.save(menuItem);
-  }
+  console.log('DTO received:', dto); // ✅ See what's coming from frontend
+
+  const menuItem = this.repo.create(dto);
+  menuItem.itemId = 'ITEM-' + randomBytes(4).toString('hex').toUpperCase();
+
+  return await this.repo.save(menuItem); // ⚠️ This line throws if any required field is missing
+}
+
  
   findAll(): Promise<Menu[]> {
     return this.repo.find();

@@ -17,8 +17,8 @@ export class Menu {
   @Column()
   category: string;
 
-  @Column()
-  vegOrNonVeg: string;
+ @Column({ nullable: true })
+vegOrNonVeg: string;
 
   @Column()
   isSpicy: boolean;
@@ -28,5 +28,8 @@ export class Menu {
 
   @Column({ nullable: true })
 imageUrl?: string;  // or imagePath
+
+ @Column({ nullable: true })  // ✅ fix the description error
+  description?: string;
 
 }

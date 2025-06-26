@@ -7,9 +7,11 @@ export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
   @Post()
-  placeOrder(@Body() dto: CreateOrderDto) {
-    return this.orderService.createOrder(dto);
-  }
+createOrder(@Body() body: any) {
+  const { tableNumber, items, subtotal, tax, total } = body;
+  return this.orderService.createOrder({ tableNumber, items, subtotal, tax, total });
+}
+
 
   @Get()
   getOrders() {

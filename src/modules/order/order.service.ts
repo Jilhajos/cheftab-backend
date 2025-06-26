@@ -15,35 +15,48 @@ export class OrderService {
   ) {}
 
   async createOrder(dto: CreateOrderDto): Promise<Order> {
-    const table = await this.tableRepo.findOne({
-      where: { tableNumber: dto.tableNumber }
-    });
-    if (!table) throw new Error('Table not found');
+    try {
+      console.log('Searching for tableNumber:', dto.tableNumber);
 
-    // Set status to occupied
-    table.status = 'occupied';
-    await this.tableRepo.save(table);
+      const table = await this.tableRepo.findOne({
+        where: { tableNumber: dto.tableNumber }
+      });
 
-    const items = dto.items.map(i =>
-      this.itemRepo.create({
-        itemName: i.itemName,
-        price: i.price,
-        quantity: i.quantity,
-        note: i.note || '',
-        totalPrice: i.totalPrice
-      })
-    );
+      if (!table) {
+        throw new Error(`Table not found with tableNumber: ${dto.tableNumber}`);
+      }
 
-    const order = this.orderRepo.create({
-      table,
-      tableNumber: dto.tableNumber,
-      items,
-      subtotal: dto.subtotal,
-      tax: dto.tax,
-      total: dto.total
-    });
+      // Set table status to occupied
+      table.status = 'occupied';
+      await this.tableRepo.save(table);
 
-    return this.orderRepo.save(order);
+      // Create order items
+      const items = dto.items.map((i) =>
+        this.itemRepo.create({
+          itemName: i.itemName,
+          price: i.price,
+          quantity: i.quantity,
+          note: i.note || '',
+          totalPrice: i.totalPrice,
+        })
+      );
+
+      // Create order
+      const order = this.orderRepo.create({
+        table,
+        tableNumber: dto.tableNumber,
+        items,
+        subtotal: dto.subtotal,
+        tax: dto.tax,
+        total: dto.total,
+      });
+
+      // Save order to DB
+      return await this.orderRepo.save(order);
+    } catch (err) {
+      console.error('Error creating order:', err);
+      throw err;
+    }
   }
 
   async getAllOrders(): Promise<Order[]> {

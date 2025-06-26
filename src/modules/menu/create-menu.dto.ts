@@ -1,8 +1,14 @@
-import { IsString, IsNumber, IsBoolean, IsEnum } from 'class-validator';
+import { IsString, IsNumber, IsBoolean } from 'class-validator';
 
 export class CreateMenuDto {
+ @IsString()
+  itemId: string;
+
   @IsString()
   name: string;
+
+  @IsString()
+  description: string;
 
   @IsNumber()
   price: number;
@@ -10,8 +16,11 @@ export class CreateMenuDto {
   @IsString()
   category: string;
 
-  @IsEnum(['veg', 'non-veg'])
-  vegOrNonVeg: 'veg' | 'non-veg';
+  @IsString()
+  imageUrl: string;
+
+  @IsString() 
+  vegOrNonVeg: string; 
 
   @IsBoolean()
   isSpicy: boolean;

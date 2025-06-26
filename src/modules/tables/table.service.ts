@@ -9,12 +9,12 @@ import { UpdateTableStatusDto } from './update-table-status.dto';
 export class TableService {
   constructor(
     @InjectRepository(Table)
-    private tableRepo: Repository<Table>
+    private tableRepo: Repository<Table>,
   ) {}
 
   async createTable(dto: CreateTableDto) {
     const existing = await this.tableRepo.findOne({
-      where: { tableNumber: dto.tableNumber }
+      where: { tableNumber: dto.tableNumber },
     });
     if (existing) throw new Error('Table number already exists');
 
@@ -22,24 +22,31 @@ export class TableService {
     return this.tableRepo.save(table);
   }
 
-  // ✅ Get tables by section (or all)
   async getTablesBySection(section?: string) {
     if (section) {
       return this.tableRepo.find({
         where: {
-          section: section as 'main' | 'outdoor' | 'private'
+          section: section as 'main' | 'outdoor' | 'private',
         },
         order: {
-          tableNumber: 'ASC'
-        }
+          tableNumber: 'ASC',
+        },
       });
     }
 
     return this.tableRepo.find({
       order: {
-        tableNumber: 'ASC'
-      }
+        tableNumber: 'ASC',
+      },
     });
+  }
+
+  async findById(id: number): Promise<Table> {
+    const table = await this.tableRepo.findOne({ where: { id } });
+    if (!table) {
+      throw new NotFoundException('Table not found');
+    }
+    return table;
   }
 
   async updateTableStatus(id: number, dto: UpdateTableStatusDto) {
@@ -58,7 +65,6 @@ export class TableService {
   }
 
   async getTotalTablesCount(): Promise<number> {
-  return this.tableRepo.count();
-}
-
+    return this.tableRepo.count();
+  }
 }
