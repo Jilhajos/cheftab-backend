@@ -40,7 +40,7 @@ export class StaffService {
 
     return { message: 'Staff deleted successfully' };
   } catch (err) {
-    console.error('❌ Failed to delete staff:', err);
+    console.error(' Failed to delete staff:', err);
     throw err;
   }
 }
